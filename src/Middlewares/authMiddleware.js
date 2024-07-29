@@ -1,9 +1,15 @@
 import { asyncGet } from '../Config/redis.js';
 import { sendError } from '../Utils/response.js';
 
-const sessionMiddleware = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   try {
-    const sessionId = req.headers['session-id'];
+    const authHeader = req.headers['authorization'];
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return sendError(res, 'Authorization header missing or malformed', 401);
+    }
+
+    const sessionId = authHeader.split(" ")[1];
     const sessionData = await asyncGet(sessionId);
 
     if (!sessionData) {
@@ -17,4 +23,4 @@ const sessionMiddleware = async (req, res, next) => {
   }
 };
 
-export default sessionMiddleware;
+export default authMiddleware;

@@ -1,3 +1,31 @@
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - name
+ *         - description
+ *         - price
+ *         - stockQuantity
+ *       properties:
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         price:
+ *           type: number
+ *         stockQuantity:
+ *           type: number
+ */
+
 /**
  * @swagger
  * /products:
@@ -9,6 +37,8 @@
  *         description: A list of products
  */
 
+
+
 /**
  * @swagger
  * /products:
@@ -16,7 +46,7 @@
  *     summary: Create a new product
  *     tags: [Products]
  *     security:
- *       - sessionId: []
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -40,6 +70,10 @@
  *     responses:
  *       201:
  *         description: Product created
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
  */
 
 /**

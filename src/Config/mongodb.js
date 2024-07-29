@@ -1,24 +1,22 @@
-import dotenv from "dotenv";
-import { MongoClient } from "mongodb";
+import dotenv from 'dotenv';
 dotenv.config();
+import mongoose from "mongoose"
 
-const url = process.env.MONGODB_URI;
-
-let client;
-
-export const connectToMongoDB = async () => {
+export const mongooseConnection = async function () {
+  const uri = process.env.MONGODB_URI;
   try {
-    client = await MongoClient.connect(url);
-    console.log("Connected to MongoDB using native driver!");
+    await mongoose.connect(uri);
+    const db = mongoose.connection.db;
+    // const collections = await db.listCollections().toArray();
+
+    // console.log("Collections:");
+    // for (const collection of collections) {
+    //   await db.collection(collection.name).reIndex();
+    // }
+    console.log('Connected to MongoDB using Mongoose');
   } catch (err) {
-    console.error("Failed to connect to MongoDB", err);
+    console.error('Failed to connect to MongoDB using Mongoose', err);
     throw err;
   }
-};
+}
 
-export const getDB = () => {
-  if (!client) {
-    throw new Error("You must connect to MongoDB first!");
-  }
-  return client.db();
-};

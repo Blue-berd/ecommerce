@@ -3,14 +3,19 @@ import express from "express";
 import swaggerConfig from "./Config/swagger.js";
 import authRoutes from "./Features/Users/UserRoutes.js";
 import { sendError } from "./Utils/response.js";
+import productRouter from "./Features/Products/ProductRoutes.js";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
+app.use((req, res, next) => {
+  console.log(req.headers)
+  next()
+}
+)
 app.use("/api/auth", authRoutes);
-// app.use("/api/products", productRouter);
+app.use("/api/products", productRouter);
 // app.use("/api/orders", orderRouter);
 // app.use("/api/cart", cartRouter);
 console.log("after routes");
