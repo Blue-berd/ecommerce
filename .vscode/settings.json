@@ -1,0 +1,6 @@
+{
+    "prettier.arrowParens": "avoid",
+    "prettier.embeddedLanguageFormatting": "off",
+    "prettier.insertPragma": true,
+    "prettier.quoteProps": "consistent"
+}

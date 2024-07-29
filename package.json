@@ -1,0 +1,29 @@
+{
+  "name": "TaskAssignment",
+  "packageManager": "yarn@4.2.2",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.44.4",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.5.1",
+    "multer": "^1.4.5-lts.1",
+    "redis": "^4.6.15",
+    "supabase": "1.187.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^10.0.0"
+  },
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
