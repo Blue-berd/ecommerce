@@ -1,13 +1,13 @@
+import bcrypt from "bcrypt";
 import supabase from "../../Config/supabase.js";
 import { generateSessionId } from "../../Utils/generateSessionId.js";
-import { sendResponse } from "../../Utils/response.js";
+import { sendError, sendResponse } from "../../Utils/response.js";
 import User from "./UserModel.js";
-
 export const login = async function (req, res, next) {
   try {
     const { email, password } = req.body;
     const { session, error } = await supabase.auth.signIn({ email, password });
-    if (error) return res.status(400).json({ error: error.message });
+    if (error) return sendError(res, error.message, 400);
 
     const sessionId = await generateSessionId();
     const sessionData = {
@@ -32,19 +32,18 @@ export const register = async function (req, res, next) {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { data, error } = await supabase
-      .from("users")
-      .insert([{ email, password: hashedPassword }]);
+    // Register user with Supabase Auth
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password: hashedPassword,
+    });
+
     if (error) throw error;
 
+    // Save additional user information to MongoDB
     await User.create({ email, password: hashedPassword, role });
-    return await sendResponse(
-      res,
-      "User Registered successfully",
-      201,
-      null,
-      null
-    );
+
+    return sendResponse(res, "User registered successfully", 201, null, null);
   } catch (error) {
     next(error);
   }

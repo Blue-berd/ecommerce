@@ -12,19 +12,19 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "http://localhost:3000/api/",
       },
     ],
     components: {
-        securitySchemes: {
-          sessionId: {
-            type: 'apiKey',
-            in: 'header',
-            name: 'session-id',
-            description: 'Session ID for user authentication'
-          }
-        }
+      securitySchemes: {
+        sessionId: {
+          type: "apiKey",
+          in: "header",
+          name: "session-id",
+          description: "Session ID for user authentication",
+        },
       },
+    },
   },
   apis: ["./src/Features/*/api-docs.js"],
 };

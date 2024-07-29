@@ -1,5 +1,5 @@
-import { asyncGet, asyncKeys } from "../../../Config/redis.js";
-import { sendResponse } from "../../../Utils/response.js";
+import { asyncGet, asyncKeys } from "../../Config/redis.js";
+import { sendResponse } from "../../Utils/response.js";
 
 export const getAllSessions = async (req, res, next) => {
   try {

@@ -1,5 +1,5 @@
 import express from "express";
-import checkRole from "../../../Middlewares/checkRole.js";
+import checkRole from "../../Middlewares/checkRole.js";
 import { getAllSessions } from "./SessionController.js";
 
 const router = express.Router();
