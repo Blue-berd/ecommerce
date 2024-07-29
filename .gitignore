@@ -11,4 +11,4 @@
 
 #!.yarn/cache
 .pnp.*
-
+.env

@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
   city: { type: String, default: null },
   locality: { type: String, default: null },
   pincode: { type: String, default: null },
-
+  password: { type: String, default: null },
   premium: { type: Boolean, default: false },
   wishlist: [
     {
