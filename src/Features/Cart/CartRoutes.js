@@ -1,10 +1,9 @@
 import express from "express";
-import sessionMiddleware from "../../Middlewares/sessionMiddlware.js";
+import authMiddleware from "../../Middlewares/authMiddleware.js";
 import { addToCart, getCart } from "./CartController.js";
-
 const cartRouter = express.Router();
 
-cartRouter.post("/", sessionMiddleware, addToCart);
-cartRouter.get("/", sessionMiddleware, getCart);
+cartRouter.post("/", authMiddleware, addToCart);
+cartRouter.get("/", authMiddleware, getCart);
 
 export default cartRouter;

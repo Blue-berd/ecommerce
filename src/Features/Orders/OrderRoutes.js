@@ -1,10 +1,9 @@
 import express from "express";
+import authMiddleware from "../../Middlewares/authMiddleware.js";
 import { createOrder, getOrders } from "./OrderController.js";
-import sessionMiddleware from "../../Middlewares/sessionMiddlware.js";
-
 const orderRouter = express.Router();
 
-orderRouter.post("/orders", sessionMiddleware, createOrder);
-orderRouter.get("/orders", sessionMiddleware, getOrders);
+orderRouter.post("/", authMiddleware, createOrder);
+orderRouter.get("/", authMiddleware, getOrders);
 
 export default orderRouter;

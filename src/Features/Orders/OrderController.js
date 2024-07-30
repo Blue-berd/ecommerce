@@ -11,6 +11,9 @@ export const createOrder = async (req, res, next) => {
       products.map(async ({ productId, quantity }) => {
         const product = await Product.findById(productId);
         if (!product) throw new Error(`Product with ID ${productId} not found`);
+        if (product.quantity < quantity) {
+          throw new Error(`Product with ID ${productId} quantity not enough.`);
+        }
         return { productId, quantity, price: product.price };
       })
     );
@@ -27,6 +30,7 @@ export const createOrder = async (req, res, next) => {
         quantity,
       })),
       totalAmount,
+      paymentStatus: "pending",
     });
     await newOrder.save();
 

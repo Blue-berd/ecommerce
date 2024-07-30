@@ -1,7 +1,10 @@
 import cors from "cors";
 import express from "express";
 import swaggerConfig from "./Config/swagger.js";
+import cartRouter from "./Features/Cart/CartRoutes.js";
+import orderRouter from "./Features/Orders/OrderRoutes.js";
 import productRouter from "./Features/Products/ProductRoutes.js";
+import sessionRouter from "./Features/Sessions/SessionRoutes.js";
 import authRoutes from "./Features/Users/UserRoutes.js";
 import { sendError } from "./Utils/response.js";
 
@@ -15,8 +18,9 @@ app.use((req, res, next) => {
 });
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRouter);
-// app.use("/api/orders", orderRouter);
-// app.use("/api/cart", cartRouter);
+app.use("/api/orders", orderRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/sessions", sessionRouter);
 
 swaggerConfig(app);
 app.use((err, req, res, next) => {

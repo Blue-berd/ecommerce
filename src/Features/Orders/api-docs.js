@@ -7,13 +7,25 @@
  *       scheme: bearer
  *       bearerFormat: JWT
  *   schemas:
+ *     ProductOrder:
+ *       type: object
+ *       required:
+ *         - productId
+ *         - quantity
+ *       properties:
+ *         productId:
+ *           type: string
+ *           format: uuid
+ *           description: The ID of the product being ordered.
+ *         quantity:
+ *           type: number
+ *           description: The quantity of the product being ordered.
  *     Order:
  *       type: object
  *       required:
  *         - userId
  *         - products
  *         - totalAmount
- *         - paymentStatus
  *       properties:
  *         userId:
  *           type: string
@@ -22,29 +34,12 @@
  *         products:
  *           type: array
  *           items:
- *             type: object
- *             required:
- *               - productId
- *               - quantity
- *             properties:
- *               productId:
- *                 type: string
- *                 format: uuid
- *                 description: The ID of the product being ordered.
- *               quantity:
- *                 type: number
- *                 description: The quantity of the product being ordered.
+ *             $ref: '#/components/schemas/ProductOrder'
+ *           description: The list of products included in the order.
  *         totalAmount:
  *           type: number
  *           format: float
  *           description: The total amount for the order.
- *         paymentStatus:
- *           type: string
- *           description: The payment status of the order (e.g., 'paid', 'pending').
- *         orderDate:
- *           type: string
- *           format: date-time
- *           description: The date and time when the order was placed.
  *   parameters:
  *     OrderIdParam:
  *       in: path
@@ -65,7 +60,7 @@
 
 /**
  * @swagger
- * /orders:
+ * /api/orders:
  *   post:
  *     summary: Create a new order
  *     tags: [Orders]
@@ -76,7 +71,14 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Order'
+ *             type: object
+ *             required:
+ *               - products
+ *             properties:
+ *               products:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/ProductOrder'
  *     responses:
  *       201:
  *         description: Order created successfully.
@@ -92,7 +94,7 @@
 
 /**
  * @swagger
- * /orders:
+ * /api/orders:
  *   get:
  *     summary: Get all orders for the logged-in user
  *     tags: [Orders]

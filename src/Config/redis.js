@@ -46,5 +46,17 @@ const asyncDel = async (key) => await redisClient.del(key);
 const asyncSetWithExpiry = async (key, value, expiry) =>
   await redisClient.set(key, value, { EX: expiry });
 
-export { asyncDel, asyncGet, asyncSet, asyncSetWithExpiry };
+// Add asyncKeys function to list all keys matching a pattern
+const asyncKeys = async (pattern) => {
+  return new Promise((resolve, reject) => {
+    redisClient.keys(pattern, (err, keys) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(keys);
+    });
+  });
+};
+
+export { asyncDel, asyncGet, asyncKeys, asyncSet, asyncSetWithExpiry };
 export default connectRedis;

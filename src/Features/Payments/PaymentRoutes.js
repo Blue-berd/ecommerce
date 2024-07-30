@@ -1,9 +1,9 @@
-import express from 'express';
-import { processPayment } from '../controllers/paymentController.js';
-import checkAuth from '../middleware/checkAuth.js';
+import express from "express";
+import authMiddleware from "../../Middlewares/authMiddleware.js";
+import { processPayment } from "../controllers/paymentController.js";
 
 const router = express.Router();
 
-router.post('/payment', checkAuth, processPayment);
+router.post("/payment", authMiddleware, processPayment);
 
 export default router;

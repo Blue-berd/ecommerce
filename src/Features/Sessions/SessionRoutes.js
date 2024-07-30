@@ -1,9 +1,10 @@
 import express from "express";
+import authMiddleware from "../../Middlewares/authMiddleware.js";
 import checkRole from "../../Middlewares/checkRole.js";
 import { getAllSessions } from "./SessionController.js";
 
-const router = express.Router();
+const sessionRouter = express.Router();
 
-router.get("/", checkRole("admin"), getAllSessions);
+sessionRouter.get("/", authMiddleware, checkRole("admin"), getAllSessions);
 
-export default router;
+export default sessionRouter;
