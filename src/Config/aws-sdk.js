@@ -1,7 +1,8 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from "uuid";
 import { ApplicationError } from "../ErrorHandler/applicationError.js";
+import supabase from "./supabase.js";
 dotenv.config();
 
 const s3Client = new S3Client({
@@ -14,22 +15,32 @@ const s3Client = new S3Client({
   },
 });
 
-const uploadToSpaces = async (bucket, file) => {
-  const params = {
-    Bucket: bucket,
-    Key: `${uuidv4()}`,
-    Body: file.buffer,
-    ContentType: file.mimetype,
-  };
+const uploadToSupabase = async (bucket, file, accessToken) => {
+  const filePath = `public/${uuidv4()}_${file.originalname}`;
 
   try {
-    const command = new PutObjectCommand(params);
-    const data = await s3Client.send(command);
-    const fileUrl = `${process.env.AWS_ENDPOINT_URL}${bucket}${params.Key}`;
-    return { fieldname: file.fieldname, path: fileUrl };
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(filePath, file.buffer, {
+        cacheControl: "3600",
+        upsert: false,
+        contentType: file.mimetype,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+    if (error) {
+      throw new ApplicationError(error.message, 400);
+    }
+
+    console.log("file data", data);
+    const fileUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/${bucket}/${filePath}`;
+    return fileUrl;
   } catch (error) {
+    console.log("ERROR----", error);
     throw new ApplicationError(error.message, 400);
   }
 };
 
-export default uploadToSpaces;
+export default uploadToSupabase;

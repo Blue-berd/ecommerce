@@ -12,7 +12,7 @@ export const getAllProducts = async (req, res, next) => {
 
 export const createProduct = async (req, res, next) => {
   const { name, description, price, stockQuantity } = req.body;
-  const image = req.fileUrl;
+  const image = req.fileUrls;
   console.log("img", image);
   try {
     const product = new Product({

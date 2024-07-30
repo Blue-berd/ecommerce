@@ -17,6 +17,8 @@ const authMiddleware = async (req, res, next) => {
     }
 
     req.session = JSON.parse(sessionData);
+    req.accessToken = req.session.accessToken;
+
     next();
   } catch (err) {
     return sendError(res, 'Session expired or not found', 403);

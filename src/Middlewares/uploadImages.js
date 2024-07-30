@@ -2,6 +2,7 @@ import multer from "multer";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import uploadToSpaces from "../Config/aws-sdk.js";
+import { access } from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,7 +29,7 @@ export const uploadImages = (bucket) => {
       try {
         const uploadedFileUrls = [];
         for (const file of req.files) {
-          const fileUrl = await uploadToSpaces(bucket, file);
+          const fileUrl = await uploadToSpaces(bucket, file, req.accessToken);
           console.log("file url in middleware", fileUrl);
           uploadedFileUrls.push(fileUrl);
         }

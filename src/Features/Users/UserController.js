@@ -22,12 +22,25 @@ export const login = async function (req, res, next) {
       return sendError(res, "Invalid password", 400);
     }
 
+    const { data: signInData, error: signInError } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+    if (signInError) {
+      return sendError(res, "Supabase authentication failed", 400);
+    }
+
+    const accessToken = signInData.session.access_token;
+
     const sessionId = await generateSessionId();
     const sessionData = {
       userId: user._id,
       role: user.role,
       loginTime: new Date(),
       ipAddress: req.ip,
+      accessToken,
     };
 
     // Store session data in Redis
@@ -37,7 +50,6 @@ export const login = async function (req, res, next) {
       process.env.SESSION_EXPIRATION
     );
 
-    // Store session data in MongoDB
     await Session.create({
       userId: user._id,
       sessionId,
