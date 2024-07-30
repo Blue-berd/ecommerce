@@ -1,6 +1,6 @@
 {
   "name": "TaskAssignment",
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "yarn@4.2.2",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.620.0",
     "@supabase/supabase-js": "^2.44.4",
