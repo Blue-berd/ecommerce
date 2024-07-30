@@ -10,9 +10,9 @@ export const addToCart = async (req, res, next) => {
     const product = await Product.findById(productId);
     if (!product) return sendError(res, "Product not found", 404);
 
-    let cart = await Cart.findOne({ supabaseId: userId });
+    let cart = await Cart.findOne({ userId: userId });
     if (!cart) {
-      cart = new Cart({ supabaseId: userId, products: [] });
+      cart = new Cart({ userId: userId, products: [] });
     }
 
     const existingProductIndex = cart.products.findIndex(
@@ -35,7 +35,7 @@ export const addToCart = async (req, res, next) => {
 export const getCart = async (req, res, next) => {
   try {
     const userId = req.session.userId;
-    const cart = await Cart.findOne({ supabaseId: userId }).populate(
+    const cart = await Cart.findOne({ userId: userId }).populate(
       "products.productId"
     );
 
