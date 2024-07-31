@@ -51,7 +51,7 @@
  *         role:
  *           type: string
  *           enum: [admin, user]
- *           example: "user"
+ *           example: "user, admin"
  *         phone:
  *           type: string
  *           example: "+1234567890"
