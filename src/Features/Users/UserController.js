@@ -10,13 +10,11 @@ export const login = async function (req, res, next) {
   try {
     const { email, password } = req.body;
 
-    // Fetch user from MongoDB
     const user = await User.findOne({ email });
     if (!user) {
       return sendError(res, "User not found", 400);
     }
 
-    // Check if the password matches
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return sendError(res, "Invalid password", 400);
@@ -43,7 +41,6 @@ export const login = async function (req, res, next) {
       accessToken,
     };
 
-    // Store session data in Redis
     await asyncSetWithExpiry(
       sessionId,
       JSON.stringify(sessionData),

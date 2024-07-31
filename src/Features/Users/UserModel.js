@@ -11,9 +11,11 @@ const userSchema = new mongoose.Schema({
   email: { type: String, default: null },
   profile_pic: { type: String, default: null },
   role: { type: String, enum: ["admin", "user"] },
-  state: { type: String, default: null },
-  city: { type: String, default: null },
-  locality: { type: String, default: null },
+  address: { type: String, default: null },
+  orders: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Order", required: true },
+  ],
+
   pincode: { type: String, default: null },
   password: { type: String, default: null },
   premium: { type: Boolean, default: false },
