@@ -1,44 +1,52 @@
 import { sendResponse } from "../../Utils/response.js";
 import Product from "../Products/ProductModel.js";
+import User from "../Users/UserModel.js";
 import Order from "./OrderModel.js";
 
-import User from "../Users/UserModel.js"; 
 export const createOrder = async (req, res, next) => {
   try {
     const { address, pincode, cartItems } = req.body;
+    console.log("Request Body:", req.body); // Debugging line
+
+    if (!cartItems || !Array.isArray(cartItems)) {
+      throw new Error("Cart items are missing or not an array");
+    }
+
     const userId = req.session.userId;
 
     const orderProducts = await Promise.all(
-      cartItems.map(async ({ productId }) => {
+      cartItems.map(async ({ productId, quantity }) => {
         const product = await Product.findById(productId);
         if (!product) throw new Error(`Product with ID ${productId} not found`);
-        return { productId, price: product.price };
+        return { productId, price: product.price, quantity };
       })
     );
 
     const totalAmount = orderProducts.reduce(
-      (total, product) => total + product.price,
+      (total, product) => total + product.price * product.quantity,
       0
     );
 
     const newOrder = new Order({
       userId,
-      products: orderProducts.map(({ productId }) => ({
+      products: orderProducts.map(({ productId, quantity }) => ({
         productId,
-        quantity: 1, 
+        quantity,
       })),
       totalAmount,
       paymentStatus: "pending",
+      address,
+      pincode,
     });
     await newOrder.save();
 
     await User.findByIdAndUpdate(userId, {
       $push: { orders: newOrder._id },
-      $set:{address, pincode}
     });
 
     return sendResponse(res, "Order placed successfully", 201, newOrder);
   } catch (error) {
+    console.error("Error in createOrder:", error.message); // Debugging line
     next(error);
   }
 };
