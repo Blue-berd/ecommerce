@@ -40,6 +40,7 @@
  *       required:
  *         - email
  *         - password
+ *         - role
  *       properties:
  *         email:
  *           type: string
@@ -49,6 +50,7 @@
  *           example: "password123"
  *         role:
  *           type: string
+ *           enum: [admin, user]
  *           example: "user"
  *         phone:
  *           type: string
@@ -113,7 +115,7 @@
  *                 email: "user@example.com"
  *                 password: "password123"
  *                 role: "user"
- *                 phone: "1234567890"
+ *                 phone: "+1234567890"
  *     responses:
  *       201:
  *         description: User registered successfully
