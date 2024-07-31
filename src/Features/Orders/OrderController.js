@@ -6,7 +6,9 @@ import Order from "./OrderModel.js";
 export const createOrder = async (req, res, next) => {
   try {
     const { address, pincode, cartItems } = req.body;
-    console.log("Request Body:", req.body); // Debugging line
+
+    // Debugging: Log the incoming request body
+    console.log("Request Body:", req.body);
 
     if (!cartItems || !Array.isArray(cartItems)) {
       throw new Error("Cart items are missing or not an array");
@@ -46,11 +48,10 @@ export const createOrder = async (req, res, next) => {
 
     return sendResponse(res, "Order placed successfully", 201, newOrder);
   } catch (error) {
-    console.error("Error in createOrder:", error.message); // Debugging line
+    console.error("Error in createOrder:", error.message);
     next(error);
   }
 };
-
 export const getOrders = async (req, res, next) => {
   try {
     const userId = req.session.userId;
