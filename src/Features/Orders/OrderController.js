@@ -64,9 +64,15 @@ export const createOrder = async (req, res, next) => {
 export const getOrders = async (req, res, next) => {
   try {
     const userId = req.session.userId;
-    const orders = await Order.find({ userId });
+    const orders = await Order.find({ userId })
+      .populate({
+        path: "products.productId",
+        model: "Product", // Ensure this matches the name of your Product model
+      })
+      .exec();
     return sendResponse(res, "Orders retrieved successfully", 200, orders);
   } catch (error) {
     next(error);
   }
 };
+
