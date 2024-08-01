@@ -6,12 +6,20 @@ import Order from "./OrderModel.js";
 
 export const createOrder = async (req, res, next) => {
   try {
-    const { cartItems, shippingCost, taxRate } = req.body; // Ensure shippingCost and taxRate are provided in the request
+    const { cartItems, shippingCost = 0, taxRate = 0 } = req.body;
 
     console.log("Request Body:", req.body);
 
     if (!cartItems || !Array.isArray(cartItems)) {
       throw new Error("Cart items are missing or not an array");
+    }
+
+    // Ensure taxRate and shippingCost are numbers
+    const taxRateNum = parseFloat(taxRate);
+    const shippingCostNum = parseFloat(shippingCost);
+
+    if (isNaN(taxRateNum) || isNaN(shippingCostNum)) {
+      throw new Error("Invalid tax rate or shipping cost");
     }
 
     const userId = req.session.userId;
@@ -31,11 +39,15 @@ export const createOrder = async (req, res, next) => {
     );
 
     // Calculate tax and shipping
-    const tax = (subtotal * taxRate) / 100;
-    const shipping = shippingCost || 0;
+    const tax = (subtotal * taxRateNum) / 100;
+    const shipping = shippingCostNum;
 
     // Calculate final total amount
     const totalAmount = subtotal + tax + shipping;
+
+    if (isNaN(totalAmount) || totalAmount < 0) {
+      throw new Error("Total amount calculation error");
+    }
 
     const newOrder = new Order({
       userId,
@@ -43,6 +55,9 @@ export const createOrder = async (req, res, next) => {
         productId,
         quantity,
       })),
+      subtotal,
+      tax,
+      shipping,
       totalAmount,
       paymentStatus: "complete",
     });
