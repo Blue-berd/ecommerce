@@ -6,7 +6,7 @@ import Order from "./OrderModel.js";
 
 export const createOrder = async (req, res, next) => {
   try {
-    const { cartItems, shippingCost = 0, taxRate = 0 } = req.body;
+    const { cartItems, shippingCost = 15, taxRate = 3 } = req.body;
 
     console.log("Request Body:", req.body);
 
@@ -55,9 +55,6 @@ export const createOrder = async (req, res, next) => {
         productId,
         quantity,
       })),
-      subtotal,
-      tax,
-      shipping,
       totalAmount,
       paymentStatus: "complete",
     });
