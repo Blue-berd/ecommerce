@@ -6,9 +6,8 @@ import Order from "./OrderModel.js";
 
 export const createOrder = async (req, res, next) => {
   try {
-    const { address, pincode, cartItems } = req.body;
+    const { cartItems } = req.body;
 
-    // Debugging: Log the incoming request body
     console.log("Request Body:", req.body);
 
     if (!cartItems || !Array.isArray(cartItems)) {
@@ -64,7 +63,7 @@ export const createOrder = async (req, res, next) => {
 export const getLastOrder = async (req, res, next) => {
   try {
     const userId = req.session.userId;
-    const order = await Order.findOne({ userId, paymentStatus: "pending" })
+    const order = await Order.find({ userId })
       .populate({
         path: "products.productId",
         model: "Product",
