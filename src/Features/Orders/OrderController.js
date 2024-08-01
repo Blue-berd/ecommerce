@@ -6,7 +6,7 @@ import Order from "./OrderModel.js";
 
 export const createOrder = async (req, res, next) => {
   try {
-    const { cartItems, shippingCost = 15, taxRate = 3 } = req.body;
+    const { cartItems } = req.body;
 
     console.log("Request Body:", req.body);
 
@@ -39,8 +39,8 @@ export const createOrder = async (req, res, next) => {
     );
 
     // Calculate tax and shipping
-    const tax = (subtotal * taxRateNum) / 100;
-    const shipping = shippingCostNum;
+    const tax = (subtotal * 0.03) / 100;
+    const shipping = (subtotal * 0.15) / 100;
 
     // Calculate final total amount
     const totalAmount = subtotal + tax + shipping;
