@@ -61,18 +61,44 @@ export const createOrder = async (req, res, next) => {
   }
 };
 
-export const getOrders = async (req, res, next) => {
+export const getLastOrder = async (req, res, next) => {
   try {
     const userId = req.session.userId;
-    const orders = await Order.find({ userId })
+    const order = await Order.findOne({ userId, paymentStatus: "pending" })
       .populate({
         path: "products.productId",
-        model: "Product", // Ensure this matches the name of your Product model
+        model: "Product",
       })
+      .sort({ orderDate: -1 })
       .exec();
-    return sendResponse(res, "Orders retrieved successfully", 200, orders);
+
+    if (!order) {
+      return sendResponse(res, "No pending orders found", 404, null);
+    }
+
+    return sendResponse(res, "Order retrieved successfully", 200, order);
   } catch (error) {
     next(error);
   }
 };
 
+export const getCompletedOrders = async (req, res, next) => {
+  try {
+    const userId = req.session.userId;
+    const orders = await Order.find({ userId, paymentStatus: 'completed' })
+      .populate({
+        path: 'products.productId',
+        model: 'Product',
+      })
+      .sort({ orderDate: -1 })
+      .exec();
+
+    if (orders.length === 0) {
+      return sendResponse(res, "No completed orders found", 404, null);
+    }
+
+    return sendResponse(res, "Completed orders retrieved successfully", 200, orders);
+  } catch (error) {
+    next(error);
+  }
+};
