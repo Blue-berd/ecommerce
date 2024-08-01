@@ -43,11 +43,8 @@ export const createOrder = async (req, res, next) => {
         productId,
         quantity,
       })),
-      subtotal, // Save subtotal
-      tax, // Save tax amount
-      shipping, // Save shipping cost
-      totalAmount, // Save final total amount
-      paymentStatus: "pending",
+      totalAmount,
+      paymentStatus: "complete",
     });
     await newOrder.save();
 
