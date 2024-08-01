@@ -6,7 +6,7 @@ import Order from "./OrderModel.js";
 
 export const createOrder = async (req, res, next) => {
   try {
-    const { cartItems } = req.body;
+    const { cartItems, shippingCost, taxRate } = req.body; // Ensure shippingCost and taxRate are provided in the request
 
     console.log("Request Body:", req.body);
 
@@ -16,6 +16,7 @@ export const createOrder = async (req, res, next) => {
 
     const userId = req.session.userId;
 
+    // Fetch product details and calculate subtotal
     const orderProducts = await Promise.all(
       cartItems.map(async ({ productId, quantity }) => {
         const product = await Product.findById(productId);
@@ -24,10 +25,17 @@ export const createOrder = async (req, res, next) => {
       })
     );
 
-    const totalAmount = orderProducts.reduce(
+    const subtotal = orderProducts.reduce(
       (total, product) => total + product.price * product.quantity,
       0
     );
+
+    // Calculate tax and shipping
+    const tax = (subtotal * taxRate) / 100;
+    const shipping = shippingCost || 0;
+
+    // Calculate final total amount
+    const totalAmount = subtotal + tax + shipping;
 
     const newOrder = new Order({
       userId,
@@ -35,7 +43,10 @@ export const createOrder = async (req, res, next) => {
         productId,
         quantity,
       })),
-      totalAmount,
+      subtotal, // Save subtotal
+      tax, // Save tax amount
+      shipping, // Save shipping cost
+      totalAmount, // Save final total amount
       paymentStatus: "pending",
     });
     await newOrder.save();
