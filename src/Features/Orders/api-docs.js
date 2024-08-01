@@ -60,7 +60,7 @@
 
 /**
  * @swagger
- * /api/orders:
+ * /orders:
  *   post:
  *     summary: Create a new order
  *     tags: [Orders]
@@ -94,7 +94,7 @@
 
 /**
  * @swagger
- * /api/orders:
+ * /orders:
  *   get:
  *     summary: Get all orders for the logged-in user
  *     tags: [Orders]
