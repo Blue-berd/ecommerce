@@ -14,14 +14,6 @@ export const createOrder = async (req, res, next) => {
       throw new Error("Cart items are missing or not an array");
     }
 
-    // Ensure taxRate and shippingCost are numbers
-    const taxRateNum = parseFloat(taxRate);
-    const shippingCostNum = parseFloat(shippingCost);
-
-    if (isNaN(taxRateNum) || isNaN(shippingCostNum)) {
-      throw new Error("Invalid tax rate or shipping cost");
-    }
-
     const userId = req.session.userId;
 
     // Fetch product details and calculate subtotal
