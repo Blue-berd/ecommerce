@@ -1,4 +1,5 @@
 import { sendResponse } from "../../Utils/response.js";
+import Cart from "../Cart/CartModel.js";
 import Product from "../Products/ProductModel.js";
 import User from "../Users/UserModel.js";
 import Order from "./OrderModel.js";
@@ -45,6 +46,13 @@ export const createOrder = async (req, res, next) => {
     await User.findByIdAndUpdate(userId, {
       $push: { orders: newOrder._id },
     });
+
+    // Empty the cart after order is created
+    await Cart.findOneAndUpdate(
+      { userId },
+      { $set: { products: [] } },
+      { new: true }
+    );
 
     return sendResponse(res, "Order placed successfully", 201, newOrder);
   } catch (error) {
