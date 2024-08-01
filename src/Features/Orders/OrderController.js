@@ -31,8 +31,8 @@ export const createOrder = async (req, res, next) => {
     );
 
     // Calculate tax and shipping
-    const tax = (subtotal * 0.03) / 100;
-    const shipping = (subtotal * 0.15) / 100;
+    const tax = (subtotal * 3) / 100;
+    const shipping = (subtotal * 15) / 100;
 
     // Calculate final total amount
     const totalAmount = subtotal + tax + shipping;
