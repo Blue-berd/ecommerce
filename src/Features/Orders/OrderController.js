@@ -37,8 +37,6 @@ export const createOrder = async (req, res, next) => {
       })),
       totalAmount,
       paymentStatus: "pending",
-      address,
-      pincode,
     });
     await newOrder.save();
 
@@ -84,10 +82,10 @@ export const getLastOrder = async (req, res, next) => {
 export const getCompletedOrders = async (req, res, next) => {
   try {
     const userId = req.session.userId;
-    const orders = await Order.find({ userId, paymentStatus: 'completed' })
+    const orders = await Order.find({ userId, paymentStatus: "completed" })
       .populate({
-        path: 'products.productId',
-        model: 'Product',
+        path: "products.productId",
+        model: "Product",
       })
       .sort({ orderDate: -1 })
       .exec();
@@ -96,7 +94,12 @@ export const getCompletedOrders = async (req, res, next) => {
       return sendResponse(res, "No completed orders found", 404, null);
     }
 
-    return sendResponse(res, "Completed orders retrieved successfully", 200, orders);
+    return sendResponse(
+      res,
+      "Completed orders retrieved successfully",
+      200,
+      orders
+    );
   } catch (error) {
     next(error);
   }
