@@ -1,11 +1,7 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  supabaseId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+ 
   fullname: { type: String, default: null },
   phone: { type: String, required: true, unique: true },
   email: { type: String, default: null },
