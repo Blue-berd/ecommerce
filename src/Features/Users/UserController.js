@@ -32,6 +32,10 @@ export const login = async function (req, res, next) {
 export const register = async function (req, res, next) {
   const { email, password, role = "user", phone } = req.body;
   try {
+    const user = await User.findOne({ email });
+    if (user) {
+      return sendError(res, "User already registered", 400);
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await User.create({
