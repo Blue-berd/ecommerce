@@ -18,7 +18,7 @@ export const login = async function (req, res, next) {
     }
     console.log("error", isPasswordValid);
 
-    const sessionId = Math.random() * 10000000;
+    const sessionId = JSON.stringify(Math.random() * 10000000);
     await asyncSetWithExpiry(
       sessionId,
       JSON.stringify(user._id),
