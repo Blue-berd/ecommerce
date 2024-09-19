@@ -21,7 +21,7 @@ export const login = async function (req, res, next) {
     const sessionId = Math.random() * 10000000;
     await asyncSetWithExpiry(
       sessionId,
-      JSON.stringify(user),
+      JSON.stringify(user._id),
       process.env.SESSION_EXPIRATION
     );
     console.log("error sessionId", sessionId);
