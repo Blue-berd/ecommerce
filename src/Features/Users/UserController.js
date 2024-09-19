@@ -16,10 +16,11 @@ export const login = async function (req, res, next) {
     if (!isPasswordValid) {
       return sendError(res, "Invalid password", 400);
     }
+    
     const sessionId = Math.random() * 10000000;
     await asyncSetWithExpiry(
       sessionId,
-      JSON.stringify(sessionData),
+      JSON.stringify(user),
       process.env.SESSION_EXPIRATION
     );
 
