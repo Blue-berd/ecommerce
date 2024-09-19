@@ -6,7 +6,7 @@ import User from "./UserModel.js";
 export const login = async function (req, res, next) {
   try {
     const { email, password } = req.body;
-
+    console.log("bodyuuuu", req.body);
     const user = await User.findOne({ email });
     if (!user) {
       return sendError(res, "User not found", 400);
@@ -16,13 +16,15 @@ export const login = async function (req, res, next) {
     if (!isPasswordValid) {
       return sendError(res, "Invalid password", 400);
     }
-    
+    console.log("error", isPasswordValid);
+
     const sessionId = Math.random() * 10000000;
     await asyncSetWithExpiry(
       sessionId,
       JSON.stringify(user),
       process.env.SESSION_EXPIRATION
     );
+    console.log("error sessionId", sessionId);
 
     return sendResponse(res, "Login successful", 201, null, sessionId);
   } catch (error) {
