@@ -19,10 +19,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
 app.use((req, res, next) => {
-  console.log("body", req.headers["Authorization"]);
+  console.log("body", req.body);
   next();
 });
+
 app.use(express.static(path.join(__dirname, "dist")));
 
 app.use("/api/auth", authRoutes);
